@@ -67,7 +67,8 @@ body response in Postman
 
 Copy the game Id and send to your friend
 
-###STEP 2:### 
+
+STEP 2:
 
 Time for both players to join the game
 
@@ -84,7 +85,10 @@ body response in Postman
 {
   "joinedGame": true
 }
-###STEP 3:###
+```
+
+
+#STEP 3:
 
 Time for both players (Mike and Jen) to make their move.
 Paper = 1, Scissors = 2, Rock = 3
@@ -102,8 +106,9 @@ body response in Postman
 {
     "playedGame": true
 }
+```
 
-###STEP 4:###
+STEP 4:
 
 Time to check who won
 
@@ -121,6 +126,7 @@ body response in Postman
     "successful": true,
     "status": 6
 }
+```
 
 Status 6 means player two won, in this case Jen won
 
