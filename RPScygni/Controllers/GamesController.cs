@@ -104,11 +104,11 @@ namespace RPScygni.Controllers
 
         /// <summary>
         /// Check game status
-        /// Game created = 1,
-        /// Player one move pending = 2,
-        /// Player two move pending = 3,
-        /// Tie = 4,
-        /// Player one won = 5,
+        /// Game created = 1
+        /// Player one move pending = 2
+        /// Player two move pending = 3
+        /// Tie = 4
+        /// Player one won = 5
         /// Player two won = 6
         /// GET api/games/gameid
         /// </summary>
