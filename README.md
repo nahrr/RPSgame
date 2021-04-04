@@ -55,7 +55,7 @@ Get game status response, will respond
 
 Use Postman, free download https://www.postman.com/
 
-###STEP 1:### 
+STEP 1:
 Let's create a game, I am choosing ExampleGame as the game name.
 
 Use post method:
@@ -91,7 +91,7 @@ body response in Postman
 ```
 
 
-#STEP 3:
+STEP 3:
 
 Time for both players (Mike and Jen) to make their move.
 Paper = 1, Scissors = 2, Rock = 3
