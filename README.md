@@ -8,6 +8,9 @@ Backend with HTTP-API for RPS game
 ### Available APIs
 
 **GET api/games/gameid**
+
+Example: https://localhost:44302/api/games/6b142927-361c-4b3c-8c0b-ee9529673d96
+
 Get game status response, will respond
 ```postman
 	{
@@ -29,13 +32,13 @@ Get game status response, will respond
   
   Create a new game, game name needs to be unique
 
-  https://localhost:44302/api/games/LetsPlay
-
+  Example: https://localhost:44302/api/games/LetsPlay
+  
 **POST api/games/gameName/playerName/gameId**
   
   Join the game, only two players allowed and player name needs to be unique, first player to join the game will be player one.
   
-   https://localhost:44302/LetsPlay/Johan/6c7dc306-3e99-4ad7-a8f8-01bbf6441f09
+  Example: https://localhost:44302/LetsPlay/Johan/6c7dc306-3e99-4ad7-a8f8-01bbf6441f09
 
 **POST api/games/gameName/playerName/playerMove**
 
@@ -46,7 +49,7 @@ Get game status response, will respond
 	Scissors = 2
 	Rock = 3
 ```
-  https://localhost:44302/LetsPlay/Johan/1
+ Example: https://localhost:44302/LetsPlay/Johan/1
 
 ## Example game
 
