@@ -16,8 +16,12 @@ namespace RPScygni.Controllers
             this.service = service;
         }
 
-        // Create game
-        // Post api/games/gameName
+        /// <summary>
+        /// Create game
+        /// POST api/games/gameName
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <returns>ActionResult - Game Id or error message</returns>
         [HttpPost]
         [Route("{gameName}")]
         public ActionResult PostGameName(string gameName)
@@ -36,8 +40,14 @@ namespace RPScygni.Controllers
             return this.Created("api/games/gameName", createGameResponse.GameId);
         }
 
-        // Join Game
-        // Post api/games/gameName/playerName/gameId
+        /// <summary>
+        /// Join game
+        /// POST api/games/gameName/playerName/gameId
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <param name="playerName"></param>
+        /// <param name="gameId"></param>
+        /// <returns>IActionResult - Joined game or error message</returns>
         [HttpPost]
         [Route("{gameName}/{playerName}/{gameId}")]
         public IActionResult PostJoinGame(string gameName, string playerName, Guid gameId)
@@ -63,17 +73,23 @@ namespace RPScygni.Controllers
             return this.Created("api/games/gameName/gameId", joinGameResponse.JoinedGame);
         }
 
-        // Play Game
-        // Post api/games/guid/playerId/nextMove
+        /// <summary>
+        /// Play game
+        /// POST api/games/gameName/playerName/playerMove
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <param name="playerName"></param>
+        /// <param name="playerMove"></param>
+        /// <returns>IActionResult - Played game or error message</returns>
         [HttpPost]
-        [Route("{gameName}/{playerName}/{nextMove:int}")]
-        public IActionResult PostPlayGame(string gameName, string playerName, Move nextMove)
+        [Route("{gameName}/{playerName}/{playerMove:int}")]
+        public IActionResult PostPlayGame(string gameName, string playerName, Move playerMove)
         {
             var playGame = new Request
             {
                 GameName = gameName,
                 PlayerName = playerName,
-                NextMove = nextMove
+                PlayerMove = playerMove
             };
 
             var playGameResponse = this.service.PlayGame(playGame);
@@ -81,11 +97,23 @@ namespace RPScygni.Controllers
             {
                 return this.BadRequest(playGameResponse.Error);
             }
+
             return this.Created("api/games/guid/playerId/nextMove", playGameResponse.PlayedGame);
         }
 
-        //Get Game Status
-        //GET api/games/gameid
+
+        /// <summary>
+        /// Check game status
+        /// Game created = 1,
+        /// Player one move pending = 2,
+        /// Player two move pending = 3,
+        /// Tie = 4,
+        /// Player one won = 5,
+        /// Player two won = 6
+        /// GET api/games/gameid
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <returns>ActionResult - Game status or error message</returns>
         [HttpGet("{gameId}")]
         public ActionResult<Game> GetAvailableGame(Guid gameId)
         {

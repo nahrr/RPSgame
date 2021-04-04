@@ -86,7 +86,6 @@ namespace RPScygni.Controllers
                 };
             }
 
-            // Check if game is full or finished
             if (game.IsFinished || game.IsFull)
             {
                 return new Response
@@ -198,11 +197,11 @@ namespace RPScygni.Controllers
                 switch (game.GameStatus)
                 {
                     case GameStatus.PlayerOneMovePending:
-                        game.PlayerOne.Move = request.NextMove;
+                        game.PlayerOne.Move = request.PlayerMove;
                         game.IsFinished = true;
                         break;
                     case GameStatus.Created:
-                        game.PlayerOne.Move = request.NextMove;
+                        game.PlayerOne.Move = request.PlayerMove;
                         game.GameStatus = GameStatus.PlayerTwoMovePending;
                         break;
                     default:
@@ -213,16 +212,18 @@ namespace RPScygni.Controllers
                 }
 
             }
-            else if (game.PlayerTwo.Name == request.PlayerName) //Check player two (pending)
+
+            //Check player two (pending)
+            else if (game.PlayerTwo.Name == request.PlayerName) 
             {
                 switch (game.GameStatus)
                 {
                     case GameStatus.PlayerTwoMovePending:
-                        game.PlayerTwo.Move = request.NextMove;
+                        game.PlayerTwo.Move = request.PlayerMove;
                         game.IsFinished = true;
                         break;
                     case GameStatus.Created:
-                        game.PlayerTwo.Move = request.NextMove;
+                        game.PlayerTwo.Move = request.PlayerMove;
                         game.GameStatus = GameStatus.PlayerOneMovePending;
                         break;
                     default:

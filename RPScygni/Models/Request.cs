@@ -9,6 +9,6 @@ namespace RPScygni.Models
         public bool Successful { get; set; }
         public Player Player { get; set; }
         public string PlayerName { get; set; }
-        public Move NextMove { get; set; }
+        public Move PlayerMove { get; set; }
     }
 }
