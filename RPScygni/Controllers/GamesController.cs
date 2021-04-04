@@ -2,7 +2,6 @@
 using RPScygni.Models;
 using System;
 
-
 namespace RPScygni.Controllers
 {
     [Produces("application/json")]
@@ -54,7 +53,7 @@ namespace RPScygni.Controllers
                     Move = Move.Empty
                 }
             };
-            
+
             var joinGameResponse = this.service.JoinGame(joinGame);
             if (joinGameResponse.Successful == false)
             {
@@ -63,6 +62,7 @@ namespace RPScygni.Controllers
 
             return this.Created("api/games/gameName/gameId", joinGameResponse.JoinedGame);
         }
+
         // Play Game
         // Post api/games/guid/playerId/nextMove
         [HttpPost]
@@ -79,7 +79,7 @@ namespace RPScygni.Controllers
             var playGameResponse = this.service.PlayGame(playGame);
             if (playGameResponse.Successful == false)
             {
-                return NotFound();
+                return this.BadRequest(playGameResponse.Error);
             }
             return this.Created("api/games/guid/playerId/nextMove", playGameResponse.PlayedGame);
         }
@@ -99,7 +99,7 @@ namespace RPScygni.Controllers
             {
                 return this.BadRequest(gameStatus);
             }
-           
+
             return this.Ok(gameStatus);
         }
     }

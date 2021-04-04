@@ -8,7 +8,11 @@ namespace RPScygni.Controllers
 {
     public class RPSGames : IRPSgames
     {
+        #region members
+
         private readonly List<Game> games;
+        #endregion
+        #region public
         public RPSGames()
         {
             games = new List<Game>();
@@ -18,11 +22,13 @@ namespace RPScygni.Controllers
         {
             foreach (Game activeGame in this.games)
             {
+                // Check if game name exists
                 if (activeGame.Name == request.GameName)
                 {
                     return new Response
                     {
-                        Error = new Errors
+                        Successful = false,
+                        Error = new Error
                         {
                             ErrorCode = HttpStatusCode.BadRequest,
                             ErrorDesc = "The game name already exists"
@@ -31,6 +37,7 @@ namespace RPScygni.Controllers
                 }
             }
 
+            // Create game
             var game = new Game
             {
                 GameId = Guid.NewGuid(),
@@ -48,13 +55,19 @@ namespace RPScygni.Controllers
                 }
             };
         }
+
         public Response JoinGame(Request request)
         {
             if (request == null || request.Player == null)
             {
                 return new Response
                 {
-                    Successful = false
+                    Successful = false,
+                    Error = new Error
+                    {
+                        ErrorCode = HttpStatusCode.BadRequest,
+                        ErrorDesc = "No player name"
+                    }
                 };
             }
 
@@ -65,43 +78,57 @@ namespace RPScygni.Controllers
                 return new Response
                 {
                     Successful = false,
-                    Error = new Errors
+                    Error = new Error
                     {
                         ErrorCode = HttpStatusCode.BadRequest,
                         ErrorDesc = "The game name or id was not found"
                     }
                 };
             }
-            //check if game is full or finished
+
+            // Check if game is full or finished
             if (game.IsFinished || game.IsFull)
             {
                 return new Response
                 {
                     Successful = false,
-                    Error = new Errors
+                    Error = new Error
                     {
                         ErrorCode = HttpStatusCode.BadRequest,
                         ErrorDesc = "Game is full or finished, use GET game to check status"
                     }
                 };
             }
-            //Join the game
+
+            // Join the game
             if (game.PlayerOne == null)
             {
                 game.PlayerOne = request.Player;
             }
             else if (game.PlayerTwo == null)
             {
+                if (request.Player.Name == game.PlayerOne.Name)
+                {
+                    return new Response
+                    {
+                        Successful = false,
+                        Error = new Error
+                        {
+                            ErrorCode = HttpStatusCode.BadRequest,
+                            ErrorDesc = "The player name has already been taken"
+                        }
+                    };
+                }
                 game.PlayerTwo = request.Player;
-                //Game is now full
                 game.IsFull = true;
             }
+
             else
             {
                 return new Response
                 {
                     Successful = false,
-                    Error = new Errors
+                    Error = new Error
                     {
                         ErrorCode = HttpStatusCode.BadRequest,
                         ErrorDesc = "The game is waiting for players"
@@ -119,33 +146,49 @@ namespace RPScygni.Controllers
             };
 
         }
+
         public Response PlayGame(Request request)
         {
-            //Validate request
+            // Validate request
             var game = games.FirstOrDefault(item => item.Name == request.GameName);
             if (game == null)
             {
                 return new Response
                 {
-                    Successful = false
+                    Successful = false,
+                    Error = new Error
+                    {
+                        ErrorCode = HttpStatusCode.BadRequest,
+                        ErrorDesc = "Game was not found"
+                    }
                 };
             }
 
-            //Check if game is finished
+            // Check if game is finished
             if (game.IsFinished)
             {
                 return new Response
                 {
-                    Successful = false
+                    Successful = false,
+                    Error = new Error
+                    {
+                        ErrorCode = HttpStatusCode.BadRequest,
+                        ErrorDesc = "Game is finished"
+                    }
                 };
             }
 
-            //Check if player is allowed
+            // Check if player is allowed
             if (game.PlayerOne.Name != request.PlayerName && game.PlayerTwo.Name != request.PlayerName)
             {
                 return new Response
                 {
-                    Successful = false
+                    Successful = false,
+                    Error = new Error
+                    {
+                        ErrorCode = HttpStatusCode.BadRequest,
+                        ErrorDesc = "Wrong player name"
+                    }
                 };
             }
 
@@ -170,8 +213,7 @@ namespace RPScygni.Controllers
                 }
 
             }
-            //Check player two (pending)
-            else if (game.PlayerTwo.Name == request.PlayerName)
+            else if (game.PlayerTwo.Name == request.PlayerName) //Check player two (pending)
             {
                 switch (game.GameStatus)
                 {
@@ -209,10 +251,10 @@ namespace RPScygni.Controllers
                 return new Response
                 {
                     Successful = false,
-                    Error = new Errors
+                    Error = new Error
                     {
                         ErrorCode = HttpStatusCode.BadRequest,
-                        ErrorDesc = "The was not found"
+                        ErrorDesc = "The game was not found"
                     }
                 };
             }
@@ -229,49 +271,43 @@ namespace RPScygni.Controllers
 
             return new Response
             {
-
                 Successful = true,
                 Status = status
             };
         }
-
+        #endregion
+        #region private
         private static GameStatus DetermineWinner(Move playerOne, Move playerTwo)
         {
 
             if (playerOne == Move.Rock && playerTwo == Move.Paper)
             {
-
                 return GameStatus.PlayerTwoWon;
             }
-
             else if (playerTwo == Move.Rock && playerOne == Move.Paper)
             {
                 return GameStatus.PlayerOneWon;
             }
-
             else if (playerOne == Move.Scissors && playerTwo == Move.Paper)
             {
                 return GameStatus.PlayerOneWon;
             }
-
             else if (playerTwo == Move.Scissors && playerOne == Move.Paper)
             {
                 return GameStatus.PlayerTwoWon;
             }
-
             else if (playerOne == Move.Paper && playerTwo == Move.Scissors)
             {
                 return GameStatus.PlayerTwoWon;
             }
-
             else if (playerTwo == Move.Paper && playerOne == Move.Scissors)
             {
                 return GameStatus.PlayerOneWon;
             }
 
-            else
-                return GameStatus.Tie;
+            return GameStatus.Tie;
         }
     }
+    #endregion
 }
 

@@ -2,7 +2,7 @@
 
 namespace RPScygni.Models
 {
-    public class Errors
+    public class Error
     {
         public HttpStatusCode ErrorCode { get; set; }
         public string ErrorDesc { get; set; }
