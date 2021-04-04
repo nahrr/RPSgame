@@ -102,6 +102,7 @@ Examples:
 
 Mike chose paper and Jen chose Scissors
 https://localhost:44302/LetsPlay/Mike/1
+
 https://localhost:44302/LetsPlay/Jen/2
 
 body response in Postman
