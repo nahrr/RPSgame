@@ -48,6 +48,82 @@ Get game status response, will respond
 ```
   https://localhost:44302/LetsPlay/Johan/1
 
+## Example game
+
+Use Postman, free download https://www.postman.com/
+
+###STEP 1:### 
+Let's create a game, I am choosing ExampleGame as the game name.
+
+Use post method:
+https://localhost:44302/api/games/ExampleGame 
+
+body response in Postman
+```postman
+{
+    "gameId": "6b142927-361c-4b3c-8c0b-ee9529673d96"
+}
+```
+
+Copy the game Id and send to your friend
+
+###STEP 2:### 
+
+Time for both players to join the game
+
+Join the game with post method, use game name, your player name and the game id
+
+Examples: 
+
+https://localhost:44302/api/games/ExampleGame/Mike/6b142927-361c-4b3c-8c0b-ee9529673d96 
+
+https://localhost:44302/api/games/ExampleGame/Jen/6b142927-361c-4b3c-8c0b-ee9529673d96 
+
+body response in Postman
+```postman
+{
+  "joinedGame": true
+}
+###STEP 3:###
+
+Time for both players (Mike and Jen) to make their move.
+Paper = 1, Scissors = 2, Rock = 3
+
+Use Post method
+
+Examples:
+
+Mike chose paper and Jen chose Scissors
+https://localhost:44302/LetsPlay/Mike/1
+https://localhost:44302/LetsPlay/Jen/2
+
+body response in Postman
+```postman
+{
+    "playedGame": true
+}
+
+###STEP 4:###
+
+Time to check who won
+
+Use the game id
+
+Use GET method
+
+Examples:
+
+https://localhost:44302/api/games/6b142927-361c-4b3c-8c0b-ee9529673d96
+
+body response in Postman
+```postman
+{
+    "successful": true,
+    "status": 6
+}
+
+Status 6 means player two won, in this case Jen won
+
 
 
 ## Language/Frameworks
